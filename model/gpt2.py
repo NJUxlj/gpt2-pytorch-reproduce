@@ -1,13 +1,18 @@
 import math
+import os
+import logging
+import json
 import torch
 import torch.nn as nn
-from typing import Optional, List, Dict, Tuple, Union
+from typing import Optional, List, Dict, Tuple, Union, Any
 from dataclasses import dataclass
 from torch.nn import functional as F
 from embeddings import GPT2Embeddings
 from config.model_config import GPT2Config
 
 from attention import CausalSelfAttention
+
+from pathlib import Path
 
 
 @dataclass
@@ -565,7 +570,7 @@ class GPT2LMHeadModel(nn.Module):
     def from_pretrained(  
         cls,  
         pretrained_model_path: Union[str, Path],  
-        config: Optional[ModelConfig] = None,  
+        config: Optional[GPT2Config] = None,  
         map_location: Optional[Union[str, torch.device]] = None  
     ) -> "GPT2LMHeadModel":  
         """  
@@ -592,7 +597,7 @@ class GPT2LMHeadModel(nn.Module):
                 
             with open(config_file, 'r', encoding='utf-8') as f:  
                 config_dict = json.load(f)  
-                config = ModelConfig(**config_dict)  
+                config = GPT2Config(**config_dict)  
         
         # 初始化模型  
         model = cls(config)  

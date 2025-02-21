@@ -36,7 +36,7 @@ class GPT2Trainer:
             n_head=config.n_head,
             activation_function=config.activation_function,
             resid_pdrop=config.resid_pdrop,
-            embd_pdrop=config.embd_pdrop,
+            embd_pdrop=config.embd_pdrop,   
             attn_pdrop=config.attn_pdrop,
             layer_norm_epsilon=config.layer_norm_epsilon
         )
