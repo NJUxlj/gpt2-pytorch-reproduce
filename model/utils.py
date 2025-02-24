@@ -3,6 +3,8 @@ import torch.nn as nn
 import numpy as np
 from typing import Optional, Tuple
 
+from enum import Enum
+
 import math
 
 def gelu_new(x):
@@ -60,3 +62,49 @@ def get_model_param_count(model: nn.Module) -> Tuple[int, int]:
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     return total_params, trainable_params
+
+
+
+
+
+
+
+
+def add_end_docstrings(*docstr):
+    def docstring_decorator(fn):
+        fn.__doc__ = (fn.__doc__ if fn.__doc__ is not None else "") + "".join(docstr)
+        return fn
+
+    return docstring_decorator
+
+
+
+
+
+
+
+class ExplicitEnum(str, Enum):
+    """
+    Enum with more explicit error message for missing values.
+    """
+
+    @classmethod
+    def _missing_(cls, value):
+        raise ValueError(
+            f"{value} is not a valid {cls.__name__}, please select one of {list(cls._value2member_map_.keys())}"
+        )
+
+
+
+class TensorType(ExplicitEnum):
+    """
+    Possible values for the `return_tensors` argument in [`PreTrainedTokenizerBase.__call__`]. Useful for
+    tab-completion in an IDE.
+    """
+
+    PYTORCH = "pt"
+    TENSORFLOW = "tf"
+    NUMPY = "np"
+    JAX = "jax"
+    MLX = "mlx"
+
